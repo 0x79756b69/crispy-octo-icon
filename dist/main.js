@@ -1,0 +1,96 @@
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/mersenne-twister/src/mersenne-twister.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/mersenne-twister/src/mersenne-twister.js ***!
+  \***************************************************************/
+/***/ ((module) => {
+
+eval("/*\n  https://github.com/banksean wrapped Makoto Matsumoto and Takuji Nishimura's code in a namespace\n  so it's better encapsulated. Now you can have multiple random number generators\n  and they won't stomp all over eachother's state.\n\n  If you want to use this as a substitute for Math.random(), use the random()\n  method like so:\n\n  var m = new MersenneTwister();\n  var randomNumber = m.random();\n\n  You can also call the other genrand_{foo}() methods on the instance.\n\n  If you want to use a specific seed in order to get a repeatable random\n  sequence, pass an integer into the constructor:\n\n  var m = new MersenneTwister(123);\n\n  and that will always produce the same random sequence.\n\n  Sean McCullough (banksean@gmail.com)\n*/\n\n/*\n   A C-program for MT19937, with initialization improved 2002/1/26.\n   Coded by Takuji Nishimura and Makoto Matsumoto.\n\n   Before using, initialize the state by using init_seed(seed)\n   or init_by_array(init_key, key_length).\n\n   Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,\n   All rights reserved.\n\n   Redistribution and use in source and binary forms, with or without\n   modification, are permitted provided that the following conditions\n   are met:\n\n     1. Redistributions of source code must retain the above copyright\n        notice, this list of conditions and the following disclaimer.\n\n     2. Redistributions in binary form must reproduce the above copyright\n        notice, this list of conditions and the following disclaimer in the\n        documentation and/or other materials provided with the distribution.\n\n     3. The names of its contributors may not be used to endorse or promote\n        products derived from this software without specific prior written\n        permission.\n\n   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n   \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR\n   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,\n   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,\n   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\n   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\n   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\n   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\n   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n\n   Any feedback is very welcome.\n   http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html\n   email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)\n*/\n\nvar MersenneTwister = function(seed) {\n\tif (seed == undefined) {\n\t\tseed = new Date().getTime();\n\t}\n\n\t/* Period parameters */\n\tthis.N = 624;\n\tthis.M = 397;\n\tthis.MATRIX_A = 0x9908b0df;   /* constant vector a */\n\tthis.UPPER_MASK = 0x80000000; /* most significant w-r bits */\n\tthis.LOWER_MASK = 0x7fffffff; /* least significant r bits */\n\n\tthis.mt = new Array(this.N); /* the array for the state vector */\n\tthis.mti=this.N+1; /* mti==N+1 means mt[N] is not initialized */\n\n\tif (seed.constructor == Array) {\n\t\tthis.init_by_array(seed, seed.length);\n\t}\n\telse {\n\t\tthis.init_seed(seed);\n\t}\n}\n\n/* initializes mt[N] with a seed */\n/* origin name init_genrand */\nMersenneTwister.prototype.init_seed = function(s) {\n\tthis.mt[0] = s >>> 0;\n\tfor (this.mti=1; this.mti<this.N; this.mti++) {\n\t\tvar s = this.mt[this.mti-1] ^ (this.mt[this.mti-1] >>> 30);\n\t\tthis.mt[this.mti] = (((((s & 0xffff0000) >>> 16) * 1812433253) << 16) + (s & 0x0000ffff) * 1812433253)\n\t\t+ this.mti;\n\t\t/* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */\n\t\t/* In the previous versions, MSBs of the seed affect   */\n\t\t/* only MSBs of the array mt[].                        */\n\t\t/* 2002/01/09 modified by Makoto Matsumoto             */\n\t\tthis.mt[this.mti] >>>= 0;\n\t\t/* for >32 bit machines */\n\t}\n}\n\n/* initialize by an array with array-length */\n/* init_key is the array for initializing keys */\n/* key_length is its length */\n/* slight change for C++, 2004/2/26 */\nMersenneTwister.prototype.init_by_array = function(init_key, key_length) {\n\tvar i, j, k;\n\tthis.init_seed(19650218);\n\ti=1; j=0;\n\tk = (this.N>key_length ? this.N : key_length);\n\tfor (; k; k--) {\n\t\tvar s = this.mt[i-1] ^ (this.mt[i-1] >>> 30)\n\t\tthis.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525)))\n\t\t+ init_key[j] + j; /* non linear */\n\t\tthis.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */\n\t\ti++; j++;\n\t\tif (i>=this.N) { this.mt[0] = this.mt[this.N-1]; i=1; }\n\t\tif (j>=key_length) j=0;\n\t}\n\tfor (k=this.N-1; k; k--) {\n\t\tvar s = this.mt[i-1] ^ (this.mt[i-1] >>> 30);\n\t\tthis.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1566083941) << 16) + (s & 0x0000ffff) * 1566083941))\n\t\t- i; /* non linear */\n\t\tthis.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */\n\t\ti++;\n\t\tif (i>=this.N) { this.mt[0] = this.mt[this.N-1]; i=1; }\n\t}\n\n\tthis.mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */\n}\n\n/* generates a random number on [0,0xffffffff]-interval */\n/* origin name genrand_int32 */\nMersenneTwister.prototype.random_int = function() {\n\tvar y;\n\tvar mag01 = new Array(0x0, this.MATRIX_A);\n\t/* mag01[x] = x * MATRIX_A  for x=0,1 */\n\n\tif (this.mti >= this.N) { /* generate N words at one time */\n\t\tvar kk;\n\n\t\tif (this.mti == this.N+1)  /* if init_seed() has not been called, */\n\t\t\tthis.init_seed(5489);  /* a default initial seed is used */\n\n\t\tfor (kk=0;kk<this.N-this.M;kk++) {\n\t\t\ty = (this.mt[kk]&this.UPPER_MASK)|(this.mt[kk+1]&this.LOWER_MASK);\n\t\t\tthis.mt[kk] = this.mt[kk+this.M] ^ (y >>> 1) ^ mag01[y & 0x1];\n\t\t}\n\t\tfor (;kk<this.N-1;kk++) {\n\t\t\ty = (this.mt[kk]&this.UPPER_MASK)|(this.mt[kk+1]&this.LOWER_MASK);\n\t\t\tthis.mt[kk] = this.mt[kk+(this.M-this.N)] ^ (y >>> 1) ^ mag01[y & 0x1];\n\t\t}\n\t\ty = (this.mt[this.N-1]&this.UPPER_MASK)|(this.mt[0]&this.LOWER_MASK);\n\t\tthis.mt[this.N-1] = this.mt[this.M-1] ^ (y >>> 1) ^ mag01[y & 0x1];\n\n\t\tthis.mti = 0;\n\t}\n\n\ty = this.mt[this.mti++];\n\n\t/* Tempering */\n\ty ^= (y >>> 11);\n\ty ^= (y << 7) & 0x9d2c5680;\n\ty ^= (y << 15) & 0xefc60000;\n\ty ^= (y >>> 18);\n\n\treturn y >>> 0;\n}\n\n/* generates a random number on [0,0x7fffffff]-interval */\n/* origin name genrand_int31 */\nMersenneTwister.prototype.random_int31 = function() {\n\treturn (this.random_int()>>>1);\n}\n\n/* generates a random number on [0,1]-real-interval */\n/* origin name genrand_real1 */\nMersenneTwister.prototype.random_incl = function() {\n\treturn this.random_int()*(1.0/4294967295.0);\n\t/* divided by 2^32-1 */\n}\n\n/* generates a random number on [0,1)-real-interval */\nMersenneTwister.prototype.random = function() {\n\treturn this.random_int()*(1.0/4294967296.0);\n\t/* divided by 2^32 */\n}\n\n/* generates a random number on (0,1)-real-interval */\n/* origin name genrand_real3 */\nMersenneTwister.prototype.random_excl = function() {\n\treturn (this.random_int() + 0.5)*(1.0/4294967296.0);\n\t/* divided by 2^32 */\n}\n\n/* generates a random number on [0,1) with 53-bit resolution*/\n/* origin name genrand_res53 */\nMersenneTwister.prototype.random_long = function() {\n\tvar a=this.random_int()>>>5, b=this.random_int()>>>6;\n\treturn(a*67108864.0+b)*(1.0/9007199254740992.0);\n}\n\n/* These real versions are due to Isaku Wada, 2002/01/09 added */\n\nmodule.exports = MersenneTwister;\n\n\n//# sourceURL=webpack://abstracon/./node_modules/mersenne-twister/src/mersenne-twister.js?");
+
+/***/ }),
+
+/***/ "./src/colors.js":
+/*!***********************!*\
+  !*** ./src/colors.js ***!
+  \***********************/
+/***/ ((module) => {
+
+eval("module.exports = [\r\n    '#01888C', // teal\r\n  '#FC7500', // bright orange\r\n  '#034F5D', // dark teal\r\n  '#F73F01', // orangered\r\n  '#FC1960', // magenta\r\n  '#C7144C', // raspberry\r\n  '#F3C100', // goldenrod\r\n  '#1598F2', // lightning blue\r\n  '#2465E1', // sail blue\r\n  '#F19E02', // gold\r\n    // '#9d02f1'\r\n]\r\n\n\n//# sourceURL=webpack://abstracon/./src/colors.js?");
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const MersenneTwister = __webpack_require__(/*! mersenne-twister */ \"./node_modules/mersenne-twister/src/mersenne-twister.js\");\r\nconst paperGen = __webpack_require__(/*! ./paper */ \"./src/paper.js\")\r\nconst colors = __webpack_require__(/*! ./colors */ \"./src/colors.js\")\r\nconst shapeCount = 4\r\nconst svgns = 'http://www.w3.org/2000/svg'\r\n\r\nmodule.exports = generateIdenticon\r\n\r\nlet generator\r\nfunction generateIdenticon(diameter, seed) {\r\n  generator = new MersenneTwister(seed);\r\n  const remainingColors = hueShift(colors.slice(), generator);\r\n  // console.log(remainingColors);\r\n\r\n  const elements = paperGen(diameter, genColor(remainingColors));\r\n  const container = elements.container;\r\n\r\n  const svg = document.createElementNS(svgns, 'svg');\r\n  svg.setAttributeNS(null, 'x', '0')\r\n  svg.setAttributeNS(null, 'y', '0')\r\n  svg.setAttributeNS(null, 'width', diameter)\r\n  svg.setAttributeNS(null, 'height', diameter)\r\n\r\n  container.appendChild(svg)\r\n\r\n  for(let i = 0; i < shapeCount - 1; i++) {\r\n    if (generator.random() < 0.5) {\r\n      genRect(remainingColors, diameter, i, shapeCount - 1, svg)\r\n    } else {\r\n      genCircle(remainingColors, diameter, i, shapeCount - 1, svg)\r\n    }\r\n  }\r\n\r\n  return container\r\n}\r\n\r\nfunction genRect(remainingColors, diameter, i, total, svg) {\r\n  const center = diameter / 2;\r\n\r\n  const shape = document.createElementNS(svgns, 'rect');\r\n  shape.setAttributeNS(null, 'x', '0')\r\n  shape.setAttributeNS(null, 'y', '0')\r\n  shape.setAttributeNS(null, 'width', diameter)\r\n  shape.setAttributeNS(null, 'height', diameter)\r\n  // shape.setAttributeNS(null, 'r', diameter)\r\n\r\n  const firstRot = generator.random();\r\n  const angle = Math.PI * 2 * firstRot;\r\n  const velocity = diameter / total * generator.random() + (i * diameter / total);\r\n\r\n  const tx = (Math.cos(angle) * velocity);\r\n  const ty = (Math.sin(angle) * velocity);\r\n\r\n  const translate = 'translate(' + tx + ' ' +  ty + ')'\r\n\r\n  // Third random is a shape rotation on top of all of that.\r\n  const secondRot = generator.random()\r\n  const rot = (firstRot * 360) + secondRot * 180\r\n  const rotate = 'rotate(' + rot.toFixed(1) + ' ' + center + ' ' + center + ')'\r\n  const transform = translate + ' ' + rotate\r\n  shape.setAttributeNS(null, 'transform', transform)\r\n  const fill = genColor(remainingColors)\r\n  shape.setAttributeNS(null, 'fill', fill)\r\n\r\n  svg.appendChild(shape)\r\n}\r\nfunction genCircle(remainingColors, diameter, i, total, svg) {\r\n  const center = diameter / 2;\r\n\r\n  const shape = document.createElementNS(svgns, 'circle');\r\n  // size\r\n  shape.setAttributeNS(null, 'cx', center)\r\n  shape.setAttributeNS(null, 'cy', center)\r\n  shape.setAttributeNS(null, 'r', center*0.8)\r\n\r\n  // x,y\r\n  const firstRot = generator.random();\r\n  const angle = Math.PI* 2 * firstRot;\r\n  const velocity = center / total * generator.random() + (i * diameter / total);\r\n  const tx = (Math.cos(angle) * velocity);\r\n  const ty = (Math.sin(angle) * velocity);\r\n  console.log(velocity, angle, Math.cos(angle));\r\n  const transform = 'translate(' + tx + ' ' +  ty + ')'\r\n  shape.setAttributeNS(null, 'transform', transform)\r\n  const stroke = genColor(remainingColors)\r\n  shape.setAttributeNS(null, 'stroke', stroke)\r\n  shape.setAttributeNS(null, 'stroke-width', center*0.1)\r\n  shape.setAttributeNS(null, 'fill', 'none')\r\n\r\n  svg.appendChild(shape)\r\n}\r\nfunction genPath(remainingColors, diameter, i, total, svg) {\r\n  const center = diameter / 2;\r\n\r\n  const shape = document.createElementNS(svgns, 'circle');\r\n  // size\r\n  shape.setAttributeNS(null, 'cx', center)\r\n  shape.setAttributeNS(null, 'cy', center)\r\n  shape.setAttributeNS(null, 'r', center*0.8)\r\n\r\n  // x,y\r\n  const firstRot = generator.random();\r\n  const angle = Math.PI* 2 * firstRot;\r\n  const velocity = diameter / total * generator.random() + (i * diameter / total);\r\n  const tx = (Math.cos(angle) * velocity);\r\n  const ty = (Math.sin(angle) * velocity);\r\n  const transform = 'translate(' + tx + ' ' +  ty + ')'\r\n  shape.setAttributeNS(null, 'transform', transform)\r\n  const stroke = genColor(remainingColors)\r\n  shape.setAttributeNS(null, 'stroke', stroke)\r\n  shape.setAttributeNS(null, 'stroke-width', center*0.1)\r\n  shape.setAttributeNS(null, 'fill', 'none')\r\n\r\n  svg.appendChild(shape)\r\n}\r\n\r\n\r\n\r\n\r\nfunction genColor(colors) {\r\n  const rand = generator.random();\r\n  const idx = Math.floor(colors.length * rand);\r\n  const color = colors.splice(idx, 1)[0];\r\n  return color\r\n}\r\n// 色相を保ったまま、色の変更\r\nconst wobble = 30\r\nfunction hueShift(colors, generator) {\r\n  const amount = (generator.random() * 30) - (wobble / 2)\r\n  const rotate = (hex) => colorRotate(hex, amount)\r\n  return colors.map(rotate)\r\n}\r\n\r\nfunction colorRotate(hex, degrees) {\r\n  const hsl = hexToHSL(hex)\r\n  let hue = hsl.h\r\n  hue = (hue + degrees) % 360;\r\n  hue = hue < 0 ? 360 + hue : hue;\r\n  hsl.h = hue;\r\n  return HSLToHex(hsl);\r\n}\r\n\r\nfunction hexToHSL(hex) {\r\n  // Convert hex to RGB first\r\n  let r = \"0x\" + hex[1] + hex[2];\r\n  let g = \"0x\" + hex[3] + hex[4];\r\n  let b = \"0x\" + hex[5] + hex[6];\r\n  // Then to HSL\r\n  r /= 255;\r\n  g /= 255;\r\n  b /= 255;\r\n  const cmin = Math.min(r,g,b),\r\n      cmax = Math.max(r,g,b),\r\n      delta = cmax - cmin;\r\n  let h = 0,\r\n      l = 0,\r\n      s = 0;\r\n\r\n  if (delta == 0)\r\n    h = 0;\r\n  else if (cmax == r)\r\n    h = ((g - b) / delta) % 6;\r\n  else if (cmax == g)\r\n    h = (b - r) / delta + 2;\r\n  else\r\n    h = (r - g) / delta + 4;\r\n\r\n  h = Math.round(h * 60);\r\n\r\n  if (h < 0)\r\n    h += 360;\r\n\r\n  l = (cmax + cmin) / 2;\r\n  s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));\r\n  s = +(s * 100).toFixed(1);\r\n  l = +(l * 100).toFixed(1);\r\n\r\n  return {h, s, l}\r\n}\r\n\r\nfunction HSLToHex(hsl) {\r\n  let {h, s, l} = hsl\r\n  s /= 100;\r\n  l /= 100;\r\n\r\n  let c = (1 - Math.abs(2 * l - 1)) * s,\r\n      x = c * (1 - Math.abs((h / 60) % 2 - 1)),\r\n      m = l - c/2,\r\n      r = 0,\r\n      g = 0, \r\n      b = 0; \r\n\r\n  if (0 <= h && h < 60) {\r\n    r = c; g = x; b = 0;\r\n  } else if (60 <= h && h < 120) {\r\n    r = x; g = c; b = 0;\r\n  } else if (120 <= h && h < 180) {\r\n    r = 0; g = c; b = x;\r\n  } else if (180 <= h && h < 240) {\r\n    r = 0; g = x; b = c;\r\n  } else if (240 <= h && h < 300) {\r\n    r = x; g = 0; b = c;\r\n  } else if (300 <= h && h < 360) {\r\n    r = c; g = 0; b = x;\r\n  }\r\n  // Having obtained RGB, convert channels to hex\r\n  r = Math.round((r + m) * 255).toString(16);\r\n  g = Math.round((g + m) * 255).toString(16);\r\n  b = Math.round((b + m) * 255).toString(16);\r\n\r\n  // Prepend 0s, if necessary\r\n  if (r.length == 1)\r\n    r = \"0\" + r;\r\n  if (g.length == 1)\r\n    g = \"0\" + g;\r\n  if (b.length == 1)\r\n    b = \"0\" + b;\r\n\r\n  return \"#\" + r + g + b;\r\n}\n\n//# sourceURL=webpack://abstracon/./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/main.js":
+/*!*********************!*\
+  !*** ./src/main.js ***!
+  \*********************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("var jazzicon = __webpack_require__(/*! ./ */ \"./src/index.js\")\r\n\r\nvar body = document.querySelector('body')\r\nfor(var i = 0; i < 100; i++) {\r\n    var el = jazzicon(200, i)\r\n    body.appendChild(el)\r\n}\n\n//# sourceURL=webpack://abstracon/./src/main.js?");
+
+/***/ }),
+
+/***/ "./src/paper.js":
+/*!**********************!*\
+  !*** ./src/paper.js ***!
+  \**********************/
+/***/ ((module) => {
+
+eval("function newPaper(diameter, color) {\r\n  const container = document.createElement('div');\r\n  container.style.borderRadius = '30px'\r\n  container.style.overflow = 'hidden'\r\n  container.style.padding = '0px'\r\n  container.style.margin = '0px'\r\n  container.style.width = '' + diameter + 'px'\r\n  container.style.height = '' + diameter + 'px'\r\n  container.style.display = 'inline-block'\r\n  container.style.background = color\r\n  return {\r\n    container: container,\r\n  }\r\n}\r\n\r\nmodule.exports = newPaper\r\n\n\n//# sourceURL=webpack://abstracon/./src/paper.js?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/main.js");
+/******/ 	
+/******/ })()
+;
